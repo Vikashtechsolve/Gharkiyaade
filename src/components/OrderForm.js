@@ -44,43 +44,28 @@ const OrderForm = ({ cartItems, onClose, onOrderSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      try {
-        const response = await fetch('http://localhost:5000/api/send-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: formData.email,
-            subject: 'Order Confirmation - Ghar Ki Yaade',
-            text: `Dear ${formData.name},\n\nYour order is confirmed. Thank you for buying from Ghar Ki Yaade!\n\nDelivery Address:\n${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}\n\nPayment Method: ${formData.paymentMethod}\n\nBest regards,\nGhar Ki Yaade Team`,
-          }),
-        });
+    if (!validate()) return;
 
-        const data = await response.json();
+    try {
+      const order = {
+        ...formData,
+        items: cartItems,
+        orderDate: new Date().toISOString(),
+        orderTotal: cartItems.reduce(
+          (total, item) => total + parseFloat(item.price.replace('₹', '')) * item.quantity,
+          0
+        ),
+      };
 
-        if (data.success) {
-          toast.success('Order confirmed! Confirmation email sent.');
-          onOrderSubmit({
-            ...formData,
-            items: cartItems,
-            orderDate: new Date().toISOString(),
-            orderTotal: cartItems.reduce((total, item) => total + (parseFloat(item.price.replace('₹', '')) * item.quantity), 0)
-          });
-        } else {
-          toast.error('Failed to send confirmation email.');
-        }
-      } catch (error) {
-        toast.error('Error sending confirmation email.');
-        // Still submit the order even if email fails
-        onOrderSubmit({
-          ...formData,
-          items: cartItems,
-          orderDate: new Date().toISOString(),
-          orderTotal: cartItems.reduce((total, item) => total + (parseFloat(item.price.replace('₹', '')) * item.quantity), 0)
-        });
+      const result = await onOrderSubmit(order);
+
+      if (result) {
+        toast.success('Order confirmed! Confirmation email sent.');
+        onClose();
       }
+    } catch (error) {
+      console.error('Order submission error in OrderForm:', error);
+      toast.error('There was a problem placing your order. Please try again.');
     }
   };
 

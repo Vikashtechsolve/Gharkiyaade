@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
-// import { sendContactFormEmail } from '../services/emailService';
+import { sendContactFormEmail } from '../services/emailService';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({

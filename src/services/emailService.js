@@ -1,10 +1,9 @@
 export async function sendContactFormEmail(formData) {
   try {
-    const response = await fetch('/api/send-email', {
+    const response = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        to: 'your-email@example.com', // Replace with your email
         subject: formData.subject,
         text: `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`,
         html: `

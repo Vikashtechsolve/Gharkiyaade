@@ -20,7 +20,7 @@ const Cart = ({ isOpen, onClose }) => {
   };
 
   const handleOrderSubmit = (orderData) => {
-    placeOrder(orderData);
+    return placeOrder(orderData);
   };
 
   return (

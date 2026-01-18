@@ -77,11 +77,13 @@ const Home = () => {
                 Experience the authentic taste of traditional home cooking with our handcrafted products made with love and care.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
-                <Link to="/products" className="px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                <Link to="/products" className="reclix-btn">
                   Shop Now
+                  <span className="reclix-microtext ml-2">✨ One-click to delicious treats</span>
                 </Link>
-                <Link to="/about" className="px-8 py-3 bg-white text-amber-700 font-medium rounded-full shadow-md border border-amber-200 hover:bg-amber-50 hover:border-amber-300 transition-all duration-300">
+                <Link to="/about" className="px-8 py-3 bg-white text-amber-700 font-medium rounded-full shadow-md border border-amber-200 hover:bg-amber-50 hover:border-amber-300 transition-all duration-300 reclix-hover-effect">
                   Learn More
+                  <span className="reclix-microtext ml-2">📖 Our story</span>
                 </Link>
               </div>
             </div>

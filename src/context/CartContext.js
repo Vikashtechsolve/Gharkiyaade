@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-// import { sendOrderConfirmationEmail, generateOrderConfirmationEmailContent } from '../services/emailService';
+
 
 const CartContext = createContext();
 
@@ -105,17 +105,22 @@ export const CartProvider = ({ children }) => {
         orderDate: new Date().toISOString()
       };
       
-      // In a real app, we would send this to a backend API
-      console.log("Order placed:", order);
-      
-      // Send confirmation email
-      const emailContent = generateOrderConfirmationEmailContent(order);
-      const emailResult = await sendOrderConfirmationEmail(order);
-      
-      if (emailResult.success) {
-        toast.success("Order confirmation email sent!", {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order),
+      });
+      const result = await response.json();
+      const success = result && result.success === true;
+      if (success) {
+        toast.success("Order placed and confirmation email sent!", {
           position: "bottom-center",
           autoClose: 3000,
+        });
+      } else {
+        toast.info("Order placed. Email service is currently unavailable.", {
+          position: "bottom-center",
+          autoClose: 5000,
         });
       }
       

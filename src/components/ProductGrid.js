@@ -157,7 +157,7 @@ const ProductGrid = ({ searchTerm }) => {
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="group bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border border-amber-100"
+            className="group reclix-card overflow-hidden cursor-pointer"
           >
             <div className="relative overflow-hidden" onClick={() => handleProductClick(product)}>
               <img
@@ -208,7 +208,7 @@ const ProductGrid = ({ searchTerm }) => {
                 <span className="text-xl font-bold text-amber-800">{product.price}</span>
                 
                 <button
-                  className="flex items-center justify-center bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="reclix-btn-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleAddToCart(product);

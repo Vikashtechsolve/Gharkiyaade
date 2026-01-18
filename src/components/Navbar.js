@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import Cart from './Cart';
+import { toast } from 'react-toastify';
 
 const Navbar = ({ searchTerm, setSearchTerm }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.localStorage.getItem('theme') === 'dark';
+  });
   const { getTotalItems } = useCart();
 
   // Handle scroll effect for navbar
@@ -26,6 +31,16 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      window.localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      window.localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -155,32 +170,61 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
             <div className="relative group">
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Let's find your perfect treat..."
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="pl-10 pr-4 py-2 border border-amber-200 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-amber-50 transition-all duration-300 w-40 lg:w-48 group-hover:w-48 lg:group-hover:w-56"
+                className="reclix-input pl-10 pr-4 py-2 w-40 lg:w-48 group-hover:w-48 lg:group-hover:w-56"
                 aria-label="Search products"
               />
-              <svg 
-                className="h-5 w-5 text-amber-500 absolute left-3 top-2.5" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24" 
+              <svg
+                className="h-5 w-5 text-reclix-blue absolute left-3 top-2.5 pointer-events-none"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
             </div>
-            
+
+            {/* Theme Toggle */}
+            <button
+              onClick={() => {
+                setIsDarkMode(!isDarkMode);
+                toast.info(`Switched to ${!isDarkMode ? 'Dark' : 'Light'} mode`, {
+                  position: "bottom-right",
+                  autoClose: 2000,
+                });
+              }}
+              className="p-2 rounded-full hover:bg-reclix-soft-100 transition-colors duration-200"
+              aria-label="Toggle theme"
+            >
+              {isDarkMode ? (
+                <svg className="h-5 w-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="h-5 w-5 text-reclix-soft-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+
             <div className="flex items-center space-x-3">
-              <button 
-                onClick={() => setCartOpen(true)} 
-                className="relative text-amber-800 hover:text-amber-600 transition-colors duration-200"
+              <button
+                onClick={() => {
+                  setCartOpen(true);
+                  toast.success('Welcome to your cart! 🛒', {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                  });
+                }}
+                className="relative text-amber-800 hover:text-reclix-blue transition-colors duration-200 hover:animate-bounce-soft"
               >
                 <svg
                   className="h-6 w-6"
@@ -197,7 +241,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
                   />
                 </svg>
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-reclix-coral text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
                     {getTotalItems()}
                   </span>
                 )}

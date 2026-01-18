@@ -16,6 +16,9 @@ import Wholesale from './pages/Wholesale';
 import Policy from './pages/Policy';
 import ReturnPolicy from './pages/ReturnPolicy';
 import ProductTracking from './pages/ProductTracking';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,7 +45,7 @@ function App() {
         />
         <Router>
           <ScrollToTop />
-          <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white text-amber-900 font-sans">
+          <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white text-amber-900 font-sans dark-surface">
             <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <main className="relative">
               <Routes>
@@ -54,6 +57,15 @@ function App() {
                 <Route path="/policy" element={<Policy />} />
                 <Route path="/return-policy" element={<ReturnPolicy />} />
                 <Route path="/product-tracking" element={<ProductTracking />} />
+                <Route path="/admin-login" element={<AdminLogin />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </main>
             <LiveChat />
